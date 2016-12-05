@@ -9,8 +9,10 @@ class Direction:
 		if (turn != 'L' and turn != 'R'):
 			raise ValueError('Turn must be L or R!')
 		
-		# Bit hackish
-		if (direction < 0 or direction > 3):
+		if (direction != Direction.NORTH and
+			direction != Direction.WEST and
+			direction != Direction.SOUTH and
+			direction != Direction.EAST):
 			raise ValueError('Direction must be NORTH, WEST, SOUTH or EAST!')
 	
 		if turn == 'L':
@@ -60,21 +62,22 @@ class Position:
 		return (self.x == other.x and self.y == other.y)
 		
 # Solving the first problem.
-def first():
+def first(input):
 	startPos = Position(0, 0)
 	currentPos = Position.copy(startPos)
 	direction = Direction.NORTH
 
-	for movement in open('input.txt').readline().split(', '):
+	for movement in input.split(', '):
 		direction = Direction.turn(direction, movement[:1])
 		currentPos.move(direction, int(movement[1:]))
 			
 	print('\nFirst part:')
 	print('\tEnd point: ' + str(currentPos))
 	print('\tDistance: ', currentPos.distanceFrom(startPos))
-	
+	return currentPos.distanceFrom(startPos)
+
 # Solving the second problem.
-def second():
+def second(input):
 	startPos = Position(0, 0)
 	currentPos = Position.copy(startPos)
 	direction = Direction.NORTH
@@ -83,7 +86,7 @@ def second():
 	history.append(Position.copy(currentPos))
 
 	found = False
-	for movement in open('input.txt').readline().split(', '):
+	for movement in input.split(', '):
 		direction = Direction.turn(direction, movement[:1])
 		
 		for i in range(int(movement[1:])):
@@ -101,7 +104,8 @@ def second():
 	print('\nSecond part:')
 	print('\tFirst point visited twice: ' + str(currentPos))
 	print('\tDistance: ', currentPos.distanceFrom(startPos))
+	return currentPos.distanceFrom(startPos)
 
 if __name__ == '__main__':
-	first()
-	second()
+	first(open('input.txt').readline())
+	second(open('input.txt').readline())
